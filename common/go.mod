@@ -1,4 +1,5 @@
-module common
+module github.com/nuricanozturk01/kariyerklubu-lib/common
+
 
 go 1.23
 
