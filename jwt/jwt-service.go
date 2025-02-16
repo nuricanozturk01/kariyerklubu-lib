@@ -3,7 +3,8 @@ package jwt
 import (
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/nuricanozturk01/kariyerklubu-lib/common/config"
+	"github.com/nuricanozturk01/kariyerklubu-lib/config"
+
 	"strconv"
 	"time"
 )

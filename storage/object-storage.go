@@ -8,7 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/smithy-go"
 	"github.com/gofiber/fiber/v2"
-	"github.com/nuricanozturk01/kariyerklubu-lib/common/config"
+	"github.com/nuricanozturk01/kariyerklubu-lib/config"
 	"log"
 	"mime/multipart"
 	"path"

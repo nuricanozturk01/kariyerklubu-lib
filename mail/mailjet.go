@@ -2,8 +2,8 @@ package mail
 
 import (
 	"github.com/mailjet/mailjet-apiv3-go/v4"
-	"github.com/nuricanozturk01/kariyerklubu-lib/common/config"
-	"github.com/nuricanozturk01/kariyerklubu-lib/common/mail/dto"
+	"github.com/nuricanozturk01/kariyerklubu-lib/config"
+	"github.com/nuricanozturk01/kariyerklubu-lib/mail/dto"
 )
 
 type Mail struct {

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gofiber/fiber/v2/log"
+	"github.com/nuricanozturk01/kariyerklubu-lib/config"
 	"io"
 	"net/http"
 	"time"

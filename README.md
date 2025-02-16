@@ -1,1 +1,0 @@
-# kariyerklubu-lib
