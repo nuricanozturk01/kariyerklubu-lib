@@ -2,10 +2,10 @@ package slack
 
 import (
 	"bytes"
-	"common/config"
 	"encoding/json"
 	"fmt"
 	"github.com/gofiber/fiber/v2/log"
+	"github.com/nuricanozturk01/kariyerklubu-lib/common/config"
 
 	"io"
 	"net/http"

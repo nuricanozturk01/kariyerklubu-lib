@@ -1,9 +1,9 @@
 package jwt
 
 import (
-	"common/config"
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/nuricanozturk01/kariyerklubu-lib/common/config"
 	"strconv"
 	"time"
 )
