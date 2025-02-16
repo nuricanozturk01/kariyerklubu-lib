@@ -8,36 +8,18 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/smithy-go"
 	"github.com/gofiber/fiber/v2"
-	"github.com/nuricanozturk01/kariyerklubu-lib/config"
+	storageCredentials "github.com/nuricanozturk01/kariyerklubu-lib/storage/credentials"
 	"log"
 	"mime/multipart"
 	"path"
 )
 
-type ObjectStorageInfo struct {
-	AccessKey string
-	SecretKey string
-	Region    string
-	Bucket    string
-	EndPoint  string
-	BasePath  string
-}
 type ObjectStorage struct {
-	Configuration *config.Config
-	StorageInfo   *ObjectStorageInfo
-	Client        *s3.Client
+	StorageInfo *storageCredentials.StorageCredentials
+	Client      *s3.Client
 }
 
-func NewObjectStorage(configuration *config.Config) *ObjectStorage {
-	storageInfo := &ObjectStorageInfo{
-		AccessKey: configuration.ObjectStorageAccessKey,
-		SecretKey: configuration.ObjectStorageSecretKey,
-		Region:    configuration.ObjectStorageRegion,
-		Bucket:    configuration.ObjectStorageBucket,
-		EndPoint:  configuration.ObjectStorageEndpoint,
-		BasePath:  configuration.DocumentBasePath,
-	}
-
+func NewObjectStorage(storageInfo *storageCredentials.StorageCredentials) *ObjectStorage {
 	s3Config := aws.Config{
 		Credentials:  credentials.NewStaticCredentialsProvider(storageInfo.AccessKey, storageInfo.SecretKey, ""),
 		Region:       storageInfo.Region,
@@ -46,9 +28,8 @@ func NewObjectStorage(configuration *config.Config) *ObjectStorage {
 	s3Client := s3.NewFromConfig(s3Config)
 
 	return &ObjectStorage{
-		Configuration: configuration,
-		StorageInfo:   storageInfo,
-		Client:        s3Client,
+		StorageInfo: storageInfo,
+		Client:      s3Client,
 	}
 }
 

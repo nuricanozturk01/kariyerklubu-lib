@@ -3,7 +3,7 @@ package jwt
 import (
 	"fmt"
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/nuricanozturk01/kariyerklubu-lib/config"
+	"github.com/nuricanozturk01/kariyerklubu-lib/jwt/credentials"
 
 	"strconv"
 	"time"
@@ -17,17 +17,17 @@ const (
 )
 
 type Jwt struct {
-	configuration *config.Config
+	credentials *credentials.JwtCredentials
 }
 
-func NewJwt(configuration *config.Config) *Jwt {
+func NewJwt(credentials *credentials.JwtCredentials) *Jwt {
 	return &Jwt{
-		configuration: configuration,
+		credentials: credentials,
 	}
 }
 
 func (j *Jwt) GenerateAccessToken(roles []string, userID, email string) (string, error) {
-	jwtSecret := j.configuration.GetEnvironment(config.JwtSecret)
+	jwtSecret := j.credentials.SecretKey
 
 	claims := jwt.MapClaims{
 		"user_id": userID,
@@ -56,7 +56,7 @@ func (j *Jwt) GenerateAccessAndRefreshToken(roles []string, userID, email string
 }
 
 func (j *Jwt) GenerateRefreshToken(userID string) (string, error) {
-	jwtSecret := j.configuration.GetEnvironment(config.JwtSecret)
+	jwtSecret := j.credentials.SecretKey
 	claims := jwt.MapClaims{
 		"user_id": userID,
 		"exp":     time.Now().Add(RefreshTokenDuration).Unix(),
@@ -89,7 +89,7 @@ func (j *Jwt) ValidateToken(tokenString string) error {
 }
 
 func (j *Jwt) getToken(tokenStr string) (*jwt.Token, error) {
-	jwtSecret := j.configuration.GetEnvironment(config.JwtSecret)
+	jwtSecret := j.credentials.SecretKey
 
 	token, err := jwt.Parse(tokenStr, func(t *jwt.Token) (any, error) {
 		return []byte(jwtSecret), nil
@@ -103,7 +103,7 @@ func (j *Jwt) getToken(tokenStr string) (*jwt.Token, error) {
 }
 
 func (j *Jwt) GetClaim(tokenString, key string) (string, error) {
-	jwtSecret := j.configuration.GetEnvironment(config.JwtSecret)
+	jwtSecret := j.credentials.SecretKey
 
 	token, err := jwt.Parse(tokenString, func(t *jwt.Token) (any, error) {
 		return []byte(jwtSecret), nil
@@ -127,7 +127,7 @@ func (j *Jwt) GetClaim(tokenString, key string) (string, error) {
 }
 
 func (j *Jwt) GetRoles(tokenString, key string) ([]string, error) {
-	jwtSecret := j.configuration.GetEnvironment(config.JwtSecret)
+	jwtSecret := j.credentials.SecretKey
 
 	token, err := jwt.Parse(tokenString, func(t *jwt.Token) (any, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -162,7 +162,7 @@ func (j *Jwt) GetRoles(tokenString, key string) ([]string, error) {
 }
 
 func (j *Jwt) GenerateRefreshPasswordToken(userId, email string) string {
-	jwtSecret := j.configuration.GetEnvironment(config.JwtSecret)
+	jwtSecret := j.credentials.SecretKey
 
 	claims := jwt.MapClaims{
 		"email":   email,

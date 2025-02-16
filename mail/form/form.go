@@ -1,4 +1,4 @@
-package dto
+package form
 
 const KariyerKlubuEmail = "kariyerklubu.com@gmail.com"
 const KariyerKlubuName = "kariyerklubu"

@@ -5,19 +5,26 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gofiber/fiber/v2/log"
-	"github.com/nuricanozturk01/kariyerklubu-lib/config"
+	"github.com/nuricanozturk01/kariyerklubu-lib/slack/credentials"
 	"io"
 	"net/http"
 	"time"
 )
 
+const (
+	SlackWarn    string = "#ffcc00"
+	SlackSuccess string = "#36a64f"
+	SlackError   string = "#ff0000"
+	SlackInfo    string = "#00008b"
+)
+
 type Slack struct {
-	configuration *config.Config
+	slackCredentials *credentials.SlackCredentials
 }
 
-func NewSlack(configuration *config.Config) *Slack {
+func NewSlack(credentials *credentials.SlackCredentials) *Slack {
 	return &Slack{
-		configuration: configuration,
+		slackCredentials: credentials,
 	}
 }
 
@@ -43,7 +50,7 @@ func (s *Slack) sendNotification(hasMarkdown bool, message, messageType string) 
 		return fmt.Errorf("error creating Slack payload: %v", err)
 	}
 
-	resp, err := http.Post(s.configuration.SlackWebhookURL, "application/json", bytes.NewBuffer(payloadBytes))
+	resp, err := http.Post(s.slackCredentials.WebHookUrl, "application/json", bytes.NewBuffer(payloadBytes))
 
 	if err != nil {
 		return fmt.Errorf("error sending Slack message: %v", err)
@@ -63,7 +70,7 @@ func (s *Slack) sendNotification(hasMarkdown bool, message, messageType string) 
 }
 
 func (s *Slack) SendSlackMessageMarkdown(message, messageType string) {
-	if s.configuration.EnableSlackNotifications {
+	if s.slackCredentials.Enable {
 		if err := s.sendNotification(true, message, messageType); err != nil {
 			fmt.Println("Failed to send slack message")
 		}
@@ -71,7 +78,7 @@ func (s *Slack) SendSlackMessageMarkdown(message, messageType string) {
 }
 
 func (s *Slack) SendSlackMessage(message, messageType string) {
-	if s.configuration.EnableSlackNotifications {
+	if s.slackCredentials.Enable {
 		if err := s.sendNotification(false, message, messageType); err != nil {
 			fmt.Println("Failed to send slack message")
 		}

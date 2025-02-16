@@ -2,32 +2,30 @@ package mail
 
 import (
 	"github.com/mailjet/mailjet-apiv3-go/v4"
-	"github.com/nuricanozturk01/kariyerklubu-lib/config"
-	"github.com/nuricanozturk01/kariyerklubu-lib/mail/dto"
+	"github.com/nuricanozturk01/kariyerklubu-lib/mail/credentials"
+	"github.com/nuricanozturk01/kariyerklubu-lib/mail/form"
 )
 
 type Mail struct {
-	configuration *config.Config
 	MailjetClient *mailjet.Client
 }
 
-func NewMailClient(configuration *config.Config) *Mail {
+func NewMailClient(credentials *credentials.MailCredentials) *Mail {
 	return &Mail{
-		configuration: configuration,
-		MailjetClient: getMailClient(configuration),
+		MailjetClient: getMailClient(credentials),
 	}
 }
 
-func getMailClient(configuration *config.Config) *mailjet.Client {
-	return mailjet.NewMailjetClient(configuration.MailjetAPIKey, configuration.MailjetSecretKey)
+func getMailClient(credentials *credentials.MailCredentials) *mailjet.Client {
+	return mailjet.NewMailjetClient(credentials.ApiKey, credentials.SecretKey)
 }
 
-func (m *Mail) SendEmailTemplate(emailForm *dto.EmailTemplateForm) (string, error) {
+func (m *Mail) SendEmailTemplate(emailForm *form.EmailTemplateForm) (string, error) {
 	messagesInfo := []mailjet.InfoMessagesV31{
 		{
 			From: &mailjet.RecipientV31{
-				Email: dto.KariyerKlubuEmail,
-				Name:  dto.KariyerKlubuName,
+				Email: form.KariyerKlubuEmail,
+				Name:  form.KariyerKlubuName,
 			},
 			To: &mailjet.RecipientsV31{
 				{
@@ -55,8 +53,8 @@ func (m *Mail) SendEmailStr(subject, message, to, name string) (string, error) {
 	messagesInfo := []mailjet.InfoMessagesV31{
 		{
 			From: &mailjet.RecipientV31{
-				Email: dto.KariyerKlubuEmail,
-				Name:  dto.KariyerKlubuName,
+				Email: form.KariyerKlubuEmail,
+				Name:  form.KariyerKlubuName,
 			},
 			To: &mailjet.RecipientsV31{
 				{
